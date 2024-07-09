@@ -21,6 +21,9 @@
     margin: 0.5rem; /* m-2 */
     background-color: #64748b; /* bg-slate-500 */
     border-radius: 0.5rem; /* rounded-lg */
+    @include sm {
+      display: none;
+    }
   }
   
   /* Hover state */
