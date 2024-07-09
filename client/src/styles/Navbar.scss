@@ -16,7 +16,18 @@
     width: 100px;
     cursor: pointer;
   }
-
+  .online_class {
+    padding: 0.5rem; /* p-2 */
+    margin: 0.5rem; /* m-2 */
+    background-color: #64748b; /* bg-slate-500 */
+    border-radius: 0.5rem; /* rounded-lg */
+  }
+  
+  /* Hover state */
+  .online_class:hover {
+    background-color: #ffffff; /* hover:bg-white */
+  }
+  
   &_search {
     border: 1px solid $grey;
     border-radius: 30px;
