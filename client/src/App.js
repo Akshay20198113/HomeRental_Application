@@ -5,7 +5,6 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 
 function App() {
-  /*main branch */
   /*hello checking git branch */
   return (
     <div>
