@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import "../styles/ListingDetails.scss";
-import { useParams } from 'react-router-dom';
-import { facilities } from '../data';
+import { useNavigate, useParams } from "react-router-dom";
+import { facilities } from "../data";
+
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
-
+import { useSelector } from "react-redux";
+import Footer from "../components/Footer"
 
 const ListingDetails = () => {
   const [loading, setLoading] = useState(true);
+
   const { listingId } = useParams();
   const [listing, setListing] = useState(null);
 
@@ -35,6 +38,9 @@ const ListingDetails = () => {
     getListingDetails();
   }, []);
 
+  console.log(listing)
+
+
   /* BOOKING CALENDAR */
   const [dateRange, setDateRange] = useState([
     {
@@ -53,13 +59,47 @@ const ListingDetails = () => {
   const end = new Date(dateRange[0].endDate);
   const dayCount = Math.round(end - start) / (1000 * 60 * 60 * 24); // Calculate the difference in day unit
 
+  /* SUBMIT BOOKING */
+  const customerId = useSelector((state) => state?.user?._id)
 
-  return loading ? (<Loader />) : (
+  const navigate = useNavigate()
+
+  const handleSubmit = async () => {
+    try {
+      const bookingForm = {
+        customerId,
+        listingId,
+        hostId: listing.creator._id,
+        startDate: dateRange[0].startDate.toDateString(),
+        endDate: dateRange[0].endDate.toDateString(),
+        totalPrice: listing.price * dayCount,
+      }
+
+      const response = await fetch("http://localhost:3002/bookings/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingForm)
+      })
+
+      if (response.ok) {
+        navigate(`/${customerId}/trips`)
+      }
+    } catch (err) {
+      console.log("Submit Booking Failed.", err.message)
+    }
+  }
+
+  return loading ? (
+    <Loader />
+  ) : (
     <>
-    <Navbar/>
+      <Navbar />
+      
       <div className="listing-details">
         <div className="title">
-          {/* <h1>{listing.title}</h1> */}
+          <h1>{listing.title}</h1>
           <div></div>
         </div>
 
@@ -76,7 +116,6 @@ const ListingDetails = () => {
           {listing.type} in {listing.city}, {listing.province},{" "}
           {listing.country}
         </h2>
-
         <p>
           {listing.guestCount} guests - {listing.bedroomCount} bedroom(s) -{" "}
           {listing.bedCount} bed(s) - {listing.bathroomCount} bathroom(s)
@@ -122,7 +161,6 @@ const ListingDetails = () => {
             </div>
           </div>
 
-
           <div>
             <h2>How long do you want to stay?</h2>
             <div className="date-range-calendar">
@@ -136,22 +174,22 @@ const ListingDetails = () => {
                   ${listing.price} x {dayCount} night
                 </h2>
               )}
+
               <h2>Total price: ${listing.price * dayCount}</h2>
               <p>Start Date: {dateRange[0].startDate.toDateString()}</p>
               <p>End Date: {dateRange[0].endDate.toDateString()}</p>
 
-
-              <button className="button" type="submit" >
+              <button className="button" type="submit" onClick={handleSubmit}>
                 BOOKING
               </button>
-
             </div>
           </div>
-
         </div>
       </div>
+
+      <Footer />
     </>
-  )
-}
+  );
+};
 
 export default ListingDetails;

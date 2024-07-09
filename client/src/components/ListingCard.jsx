@@ -7,7 +7,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import { setWishList } from "../redux/state";
+import { setWishList } from "../redux/state";
 
 const ListingCard = ({
   listingId,
@@ -50,7 +50,7 @@ const ListingCard = ({
   const patchWishList = async () => {
     if (user?._id !== creator._id) {
     const response = await fetch(
-      `http://localhost:3001/users/${user?._id}/${listingId}`,
+      `http://localhost:3002/users/${user?._id}/${listingId}`,
       {
         method: "PATCH",
         header: {
@@ -59,7 +59,7 @@ const ListingCard = ({
       }
     );
     const data = await response.json();
-    // dispatch(setWishList(data.wishList));
+    dispatch(setWishList(data.wishList));
   } else { return }
   };
 
@@ -78,7 +78,7 @@ const ListingCard = ({
           {listingPhotoPaths?.map((photo, index) => (
             <div key={index} className="slide">
               <img
-                src={`http://localhost:3001/${photo?.replace("public", "")}`}
+                src={`http://localhost:3002/${photo?.replace("public", "")}`}
                 alt={`photo ${index + 1}`}
               />
               <div
