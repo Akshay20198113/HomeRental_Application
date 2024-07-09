@@ -7,6 +7,7 @@ import "../styles/Navbar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../redux/state";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import Geolocation from "./Geolocation";
 
 
 const Navbar = () => {
@@ -25,6 +26,7 @@ const Navbar = () => {
       <a href="/">
         <img src="/assets/logo.png" alt="logo" />
       </a>
+      <div><Geolocation/> </div>
       <li className="online_class">OnlineStatus:{online ? "✅" : "🔴"}</li>
       <div className="navbar_search">
         <input
