@@ -6,7 +6,6 @@ import LoginPage from "./pages/LoginPage";
 
 function App() {
   /*main branch */
-  /*hello checking git branch */
   return (
     <div>
       <BrowserRouter>
